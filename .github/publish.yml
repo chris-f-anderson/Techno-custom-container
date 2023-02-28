@@ -1,0 +1,19 @@
+# publish your docker image to github container registry - substituting it-works-dna for hello-docker
+name: publish
+on: [push]
+jobs:
+publish-it-works-dna:
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v2
+- name: Login to GitHub Container Registry
+uses: docker/login-action@v1
+with:
+registry: ghcr.io
+username: ${{ github.actor }}
+password: ${{ secrets.GITHUB_TOKEN }}
+- name: Build the techno2 Docker image
+run: |
+       docker build . --tag ghcr.io/chris-f-anderson/it-works-dna-demo:latest
+       docker run ghcr.io/chris-f-anderson/it-works-dna-demo:latest
+       docker push ghcr.io/chris-f-anderson/it-works-dna-demo:latest
